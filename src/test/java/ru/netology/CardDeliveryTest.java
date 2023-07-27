@@ -1,5 +1,6 @@
 package ru.netology;
 
+import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
 import io.github.bonigarcia.wdm.WebDriverManager;
@@ -31,13 +32,14 @@ public class CardDeliveryTest {
 
     @Test//Успешное оформление доставки карты
     void shouldArrangeDeliveryOfCard() {
+
         $("[data-test-id=\"city\"] [placeholder=\"Город\"]").setValue("Москва");
         $("[data-test-id=\"date\"] [placeholder=\"Дата встречи\"]").val(generateDate(5));
         $("[data-test-id=\"name\"] [name=\"name\"]").setValue("Иванов Иван");
         $("[data-test-id=\"phone\"] [name=\"phone\"]").setValue("+79999999999");
         $("[data-test-id=\"agreement\"]").click();
         $(".button__content").click();
-        $(byText("Успешно!")).shouldBe(visible, Duration.ofSeconds(15));
+        $(".notification__content").shouldHave(Condition.text("Встреча успешно забронирована на " + generateDate(5)), Duration.ofSeconds(15)).shouldBe(visible);
     }
 
     @Test//Использование в названии города дефис
@@ -48,7 +50,7 @@ public class CardDeliveryTest {
         $("[data-test-id=\"phone\"] [name=\"phone\"]").setValue("+79999999999");
         $("[data-test-id=\"agreement\"]").click();
         $(".button__content").click();
-        $(byText("Успешно!")).shouldBe(visible, Duration.ofSeconds(15));
+        $(".notification__content").shouldHave(Condition.text("Встреча успешно забронирована на " + generateDate(5)), Duration.ofSeconds(15)).shouldBe(visible);
     }
 
     @Test//Использование в фамилии дефис
@@ -59,6 +61,6 @@ public class CardDeliveryTest {
         $("[data-test-id=\"phone\"] [name=\"phone\"]").setValue("+79999999999");
         $("[data-test-id=\"agreement\"]").click();
         $(".button__content").click();
-        $(byText("Успешно!")).shouldBe(visible, Duration.ofSeconds(15));
+        $(".notification__content").shouldHave(Condition.text("Встреча успешно забронирована на " + generateDate(3)), Duration.ofSeconds(15)).shouldBe(visible);
     }
 }
